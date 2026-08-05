@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ƒ<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -722,33 +722,54 @@ function startLetterAnim(){
 }
 
 /* ---------------- video ---------------- */
-(function(){
-  const v = document.getElementById('loveVideo');
-  const fb = document.getElementById('videoFallback');
-  const playOverlay = document.getElementById('playOverlay');
+  .video-wrap{max-width:640px;width:100%;}
+  .video-frame{
+    width:100%;max-width:320px;margin:0 auto;
+    border-radius:26px;overflow:hidden;
+    box-shadow:0 24px 60px var(--shadow);
+    background:#000;
+    border:1px solid rgba(255,255,255,.08);
+    aspect-ratio:9/16;position:relative;
+  }
+  video{width:100%;height:100%;display:block;background:#000;object-fit:cover;}
+  .play-overlay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(10,4,14,.22);cursor:pointer;transition:opacity .35s ease;
+  }
+  .play-overlay.hidden{opacity:0;pointer-events:none;}
+  .play-heart{
+    width:72px;height:72px;border-radius:50%;
+    background:linear-gradient(135deg,var(--rose-soft),var(--rose-deep));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 14px 30px rgba(0,0,0,.4);
+    color:#fff;font-size:1.5rem;padding-left:4px;
+    animation:floaty 3s ease-in-out infinite;
+  }
+  .video-fallback{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:8px;color:var(--cream-dim);padding:30px;text-align:center;
+  }
+  .video-fallback .big{font-size:2rem;}
+  .closing{margin-top:26px;color:var(--cream-dim);font-size:.95rem;}
+  .video-actions{margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
-  v.addEventListener('error', ()=>{ v.style.display='none'; fb.style.display='flex'; playOverlay.classList.add('hidden'); }, true);
-  const src = v.querySelector('source');
-  src.addEventListener('error', ()=>{ v.style.display='none'; fb.style.display='flex'; playOverlay.classList.add('hidden'); });
+  footer.small{
+    position:relative;z-index:1;text-align:center;color:rgba(251,238,230,.35);
+    font-size:.75rem;padding:0 0 28px;
+  }
+</style>
+</head>
+<body>
 
-  playOverlay.addEventListener('click', ()=>{
-    v.setAttribute('controls','');
-    v.play();
-  });
-  v.addEventListener('play', ()=>{ playOverlay.classList.add('hidden'); });
-  v.addEventListener('pause', ()=>{ if(!v.ended) playOverlay.classList.remove('hidden'); });
-  v.addEventListener('ended', ()=>{ playOverlay.classList.remove('hidden'); });
+<div class="bokeh" id="bokeh"></div>
+<div class="lights">
+  <svg viewBox="0 0 1000 46" preserveAspectRatio="none">
+    <path d="M0,6 Q125,40 250,6 T500,6 T750,6 T1000,6" stroke="rgba(255,255,255,.14)" stroke-width="2" fill="none"/>
+  </svg>
+</div>
+<button class="mute-btn" id="muteBtn" title="Toggle sound effects">🔊</button>
 
-  document.getElementById('watchAgainBtn').addEventListener('click', ()=>{
-    v.setAttribute('controls','');
-    v.currentTime = 0;
-    v.play();
-  });
-  document.getElementById('replayGameBtn').addEventListener('click', ()=>{
-    showScreen('screen-difficulty');
-  });
-})();
-
+<div class="stage">
 /* ================= GAME ================= */
 const DIFF = {
   easy:   { gravity:0.26, lift:-0.46, speed:2.0, spawn:118, gap:230, target:8,  lives:5, particle:'#ffc2d4' },
